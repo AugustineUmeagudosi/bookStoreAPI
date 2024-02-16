@@ -1,5 +1,5 @@
 import { Response } from '../../utils';
-import booksServices from './book.service';
+import BooksServices from './book.service';
 
 /**
  * controllers that contains methods for managing books
@@ -20,7 +20,7 @@ class BookController {
       res,
       'books fetched successfully!',
       200,
-      await booksServices.getBooks(req.query)
+      await BooksServices.getBooks(req.query)
     );
   }
 }
