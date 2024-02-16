@@ -69,16 +69,16 @@ export default class OrderServices {
    * @returns { Promise<Object | Error> } A promise that resolves or rejects
    * with an Object of the order resource or a DB Error.
   */
-  static async getOrders({ page, size }) {
-    if (!page) return db.manyOrNone(orderQueries.getOrders, []);
+  static async getOrders({ page, size }, userReference) {
+    if (!page) return db.manyOrNone(orderQueries.getOrders, [userReference]);
 
     const [{ count }, orders] = await Helpers.fetchResourceByPage({
       page,
       size,
       getCount: orderQueries.countPaginatedOrders,
-      countParams: [],
+      countParams: [userReference],
       getResources: orderQueries.getPaginatedOrders,
-      params: [],
+      params: [userReference],
     });
 
     return {

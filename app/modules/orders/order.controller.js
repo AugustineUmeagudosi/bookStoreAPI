@@ -36,11 +36,13 @@ class OrderController {
    * @memberof OrderController
   */
   static async getOrders(req, res) {
+    const { query, user: { userReference } } = req;
+
     return Response.info(
       res,
       'orders fetched successfully!',
       200,
-      await OrderServices.getOrders(req.query)
+      await OrderServices.getOrders(query, userReference)
     );
   }
 }
