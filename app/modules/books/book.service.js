@@ -32,4 +32,14 @@ export default class BookServices {
       books
     };
   }
+
+  /**
+   * fetches books by array of book references
+   * @memberof BookServices
+   * @returns { Promise<Object | Error> } A promise that resolves or rejects
+   * with an Object of the book resource or a DB Error.
+  */
+  static async getBooksByArrayOfReferences(bookReferences) {
+    return db.manyOrNone(BookQueries.getBooksByArrayOfReferences, [bookReferences]);
+  }
 }

@@ -7,6 +7,26 @@ import OrderServices from './order.service';
  */
 class OrderController {
   /**
+   * creates an order
+   *
+   * @static
+   * @param { Request } req - The request from the endpoint.
+   * @param { Response } res - The response returned by the method.
+   * @returns { JSON } A JSON response with a success message or error.
+   * @memberof OrderController
+  */
+  static async createOrder(req, res) {
+    const { body, user: { userReference } } = req;
+
+    return Response.info(
+      res,
+      'order created successfully!',
+      200,
+      await OrderServices.createOrder(body, userReference)
+    );
+  }
+
+  /**
    * fetches all orders
    *
    * @static
