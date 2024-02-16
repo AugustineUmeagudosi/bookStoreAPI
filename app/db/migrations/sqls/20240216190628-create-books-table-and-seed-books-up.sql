@@ -4,13 +4,15 @@ CREATE TABLE IF NOT EXISTS books (
   title VARCHAR (100) NOT NULL,
   ISBN VARCHAR (13) UNIQUE NOT NULL,
   author VARCHAR (100),
-  amount FLOAT NOT NULL,
+  price FLOAT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE INDEX idx_books_reference ON books(reference);
+
 INSERT INTO books 
-  (reference, title, ISBN, author, amount)
+  (reference, title, ISBN, author, price)
 VALUES 
   ('7TtlpKGz22', 'To Kill a Mockingbird', '9780061120084', 'Harper Lee', 300),
   ('Fncy2zvXIz', '1984', '9780451524935', 'George Orwell', 400),

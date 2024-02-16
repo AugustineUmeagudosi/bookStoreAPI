@@ -1,11 +1,11 @@
 export default {
   getBooks: `
-    SELECT reference, title, ISBN, author, created_at, updated_at
+    SELECT reference, title, ISBN, author, price, created_at, updated_at
     FROM books;
   `,
 
   getPaginatedBooks: `
-    SELECT reference, title, ISBN, author, created_at, updated_at
+    SELECT reference, title, ISBN, author, price, created_at, updated_at
     FROM books
     OFFSET $1
     LIMIT $2;
@@ -14,5 +14,11 @@ export default {
   countPaginatedBooks: `
     SELECT COUNT(id)
     FROM books;
+  `,
+
+  getBooksByArrayOfReferences: `
+    SELECT reference, title, ISBN, author, price, created_at, updated_at
+    FROM books
+    WHERE reference = ANY($1);
   `
 };
