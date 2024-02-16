@@ -1,25 +1,18 @@
 export default {
-  createPlan: `
-    INSERT INTO plans(reference, name, price, benefits, duration)
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING reference, name, price, duration, benefits, created_at;
+  getBooks: `
+    SELECT reference, title, ISBN, author, created_at, updated_at
+    FROM books;
   `,
 
-  updatePlan: `
-    UPDATE plans
-    SET name = $2, price = $3, benefits = $4, duration = $5
-    WHERE reference = $1
-    RETURNING reference, name, price, duration, benefits, created_at;
+  getPaginatedBooks: `
+    SELECT reference, title, ISBN, author, created_at, updated_at
+    FROM books
+    OFFSET $1
+    LIMIT $2;
   `,
 
-  getPlan: `
-    SELECT reference, name, price, duration, benefits, created_at
-    FROM plans
-    WHERE reference = $1;
-  `,
-
-  getPlans: `
-    SELECT reference, name, price, duration, benefits, created_at
-    FROM plans;
-  `,
+  countPaginatedBooks: `
+    SELECT COUNT(id)
+    FROM books;
+  `
 };

@@ -10,7 +10,7 @@ This repository contains the APIs for the bookStore backend
 ## How to use
 
 - [Documentation](/docs/README.md)
-- [API Documentation]()
+- [API Documentation](https://documenter.getpostman.com/view/27254452/2sA2r7zP33)
 
 ## Copyright
 
