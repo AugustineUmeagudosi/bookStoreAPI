@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Redis from 'ioredis';
 import { v4 as uuidv4 } from 'uuid';
+import crypto from 'crypto';
 import db from '../db';
 
 const chance = new Chance();
@@ -67,11 +68,11 @@ export const hashPassword = (password) => bcrypt.hash(password, 10);
  * @returns {String}
  */
 // eslint-disable-next-line max-len
-export const generateAuthToken = async (data) => {
-  const token = jwt.sign(data, process.env.PAYSMOSMO_JWT_SECRET, { expiresIn: '1d' });
+export const generateAuthToken = (data) => {
+  const token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '1d' });
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-  await RedisClient().setex(hashedToken, 86400, 1); // 86400 is one day in seconds
+  RedisClient().setex(hashedToken, 86400, 1); // 86400 is one day in seconds
   return token;
 };
 
@@ -93,7 +94,7 @@ export const verifyToken = (token, returnError = false) => {
 };
 
 /**
- * Fetches a pagination collection of a resource.
+ * Fetches a paginated collection of a resource.
  * @static
  * @param {Object} options - configuration options.
  * @param {number} options.page - Current page e.g: 1 represents first

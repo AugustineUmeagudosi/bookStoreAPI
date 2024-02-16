@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+import crypto from 'crypto';
 import { Response, Helpers } from '../utils';
 import errorHandler from '../../config/errorHandler';
 
