@@ -67,7 +67,13 @@ export const hashPassword = (password) => bcrypt.hash(password, 10);
  * @returns {String}
  */
 // eslint-disable-next-line max-len
-export const generateAuthToken = (data, expiresIn) => jwt.sign(data, process.env.JWT_SECRET, { expiresIn });
+export const generateAuthToken = async (data) => {
+  const token = jwt.sign(data, process.env.PAYSMOSMO_JWT_SECRET, { expiresIn: '1d' });
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  await RedisClient().setex(hashedToken, 86400, 1); // 86400 is one day in seconds
+  return token;
+};
 
 /**
  * This verify the JWT token with the secret with which the token was issued with

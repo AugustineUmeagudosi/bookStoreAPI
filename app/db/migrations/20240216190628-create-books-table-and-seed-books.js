@@ -20,7 +20,7 @@ exports.setup = (options, seedLink) => {
 };
 
 exports.up = (db) => {
-  const filePath = path.join(__dirname, 'sqls', '20240214205727-create-services-table-up.sql');
+  const filePath = path.join(__dirname, 'sqls', '20240216190628-create-books-table-and-seed-books-up.sql');
   return new Promise(((resolve, reject) => {
     fs.readFile(filePath, { encoding: 'utf-8' }, (err, data) => {
       if (err) return reject(err);
@@ -33,7 +33,7 @@ exports.up = (db) => {
 };
 
 exports.down = (db) => {
-  const filePath = path.join(__dirname, 'sqls', '20240214205727-create-services-table-down.sql');
+  const filePath = path.join(__dirname, 'sqls', '20240216190628-create-books-table-and-seed-books-down.sql');
   return new Promise(((resolve, reject) => {
     fs.readFile(filePath, { encoding: 'utf-8' }, (err, data) => {
       if (err) return reject(err);

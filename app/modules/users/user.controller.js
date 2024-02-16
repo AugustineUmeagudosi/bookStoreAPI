@@ -53,7 +53,7 @@ class UserController {
     const sessionToken = Helpers.generateAuthToken({
       userReference: user.reference,
       role: user.role,
-    }, '1d');
+    });
 
     const data = _.pick(user, Constants.userDetails);
     data.auth_token = sessionToken;

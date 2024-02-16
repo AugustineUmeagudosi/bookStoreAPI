@@ -16,6 +16,12 @@ export const isAuthenticated = async (req, res, next) => {
     if (!authorization || !authorization.startsWith('Bearer')) return Response.error(res, 'Kindly login to continue', 401);
 
     const token = authorization.split(' ')[1];
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    // check if token has been logged out
+    const validToken = await Helpers.RedisClient().get(hashedToken);
+    if (!validToken) return Response.error(res, 'Invalid or expired token', 401);
+
     const decoded = Helpers.verifyToken(token);
     req.user = decoded;
     next();

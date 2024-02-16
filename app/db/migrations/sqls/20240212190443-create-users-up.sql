@@ -1,11 +1,8 @@
-CREATE TYPE user_role AS ENUM('user', 'admin');
-
 CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
   reference VARCHAR (10) UNIQUE NOT NULL,
   name VARCHAR (50) NOT NULL,
-  role user_role DEFAULT 'user',
-  email VARCHAR (50) UNIQUE,
+  email VARCHAR (50) UNIQUE NOT NULL,
   password VARCHAR (100),
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
