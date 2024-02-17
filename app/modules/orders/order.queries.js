@@ -1,37 +1,19 @@
 export default {
   getOrders: `
-    SELECT
-      orders.reference,
-      orders.user_id,
-      orders.total_amount,
-      orders.status,
-      orders.created_at,
-      orders.updated_at,
-      COALESCE((
-        SELECT json_agg(
-          json_build_object(
-            'reference', order_items.reference,
-            'order_id', order_items.order_id,
-            'book_id', order_items.book_id,
-            'quantity', order_items.quantity,
-            'amount', order_items.amount,
-            'created_at', order_items.created_at,
-            'updated_at', order_items.updated_at
-          )
-        )
-        FROM order_items
-        WHERE order_items.order_id = orders.reference
-      ), '[]'::json) AS orderItems
-    FROM orders
-    LEFT JOIN order_items ON orders.reference = order_items.order_id
-    WHERE orders.user_id = $1
-    GROUP BY
+  SELECT
     orders.reference,
     orders.user_id,
     orders.total_amount,
     orders.status,
     orders.created_at,
-    orders.updated_at;
+    orders.updated_at,
+    (
+      SELECT COUNT(*)
+      FROM order_items
+      WHERE order_items.order_id = orders.reference
+    ) AS total_items
+  FROM orders
+  WHERE orders.user_id = $1;
   `,
 
   getPaginatedOrders: `
@@ -42,31 +24,13 @@ export default {
       orders.status,
       orders.created_at,
       orders.updated_at,
-      COALESCE((
-        SELECT json_agg(
-          json_build_object(
-            'reference', order_items.reference,
-            'order_id', order_items.order_id,
-            'book_id', order_items.book_id,
-            'quantity', order_items.quantity,
-            'amount', order_items.amount,
-            'created_at', order_items.created_at,
-            'updated_at', order_items.updated_at
-          )
-        )
+      (
+        SELECT COUNT(*)
         FROM order_items
         WHERE order_items.order_id = orders.reference
-      ), '[]'::json) AS orderItems
+      ) AS total_items
     FROM orders
-    LEFT JOIN order_items ON orders.reference = order_items.order_id
     WHERE orders.user_id = $3
-    GROUP BY
-    orders.reference,
-    orders.user_id,
-    orders.total_amount,
-    orders.status,
-    orders.created_at,
-    orders.updated_at
     OFFSET $1
     LIMIT $2;
   `,
