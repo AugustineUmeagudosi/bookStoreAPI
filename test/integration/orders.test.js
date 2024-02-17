@@ -10,6 +10,47 @@ chai.use(chaiHttp);
 const baseUrl = '/api/v1/orders';
 
 describe('Customer Routes', () => {
+  it('Should fail to create an order if an invalid authentication token was provided', (done) => {
+    expect(process.env.AUTH_TOKEN).to.exist;
+
+    chai
+      .request(app)
+      .post(`${baseUrl}`)
+      .set('Authorization', `Bearer ${process.env.AUTH_TOKEN}err`)
+      .send({
+        books: {
+          '7TtlpKGz22': 1,
+          '2gIsC7wawX': 2
+        },
+        paymentMethod: 'cash'
+      })
+      .end((err, res) => {
+        const { message, status } = res.body;
+        expect(status).to.equal('error');
+        expect(message).to.equal('Invalid or expired token');
+        done();
+      });
+  });
+
+  it('Should fail to create order if no authentication token was provided', (done) => {
+    chai
+      .request(app)
+      .post(`${baseUrl}`)
+      .send({
+        books: {
+          '7TtlpKGz22': 1,
+          '2gIsC7wawX': 2
+        },
+        paymentMethod: 'cash'
+      })
+      .end((err, res) => {
+        const { message, status } = res.body;
+        expect(status).to.equal('error');
+        expect(message).to.equal('Kindly login to continue');
+        done();
+      });
+  });
+
   it('Should successfuly create an order', (done) => {
     expect(process.env.AUTH_TOKEN).to.exist;
 
@@ -90,6 +131,33 @@ describe('Customer Routes', () => {
         const { message, status } = res.body;
         expect(status).to.equal('error');
         expect(message).to.equal('"books" is required');
+        done();
+      });
+  });
+
+  it('Should fail to fetch orders if an invalid authentication token was provided', (done) => {
+    expect(process.env.AUTH_TOKEN).to.exist;
+
+    chai
+      .request(app)
+      .get(`${baseUrl}`)
+      .set('Authorization', `Bearer ${process.env.AUTH_TOKEN}err`)
+      .end((err, res) => {
+        const { message, status } = res.body;
+        expect(status).to.equal('error');
+        expect(message).to.equal('Invalid or expired token');
+        done();
+      });
+  });
+
+  it('Should fail to fetch orders if no authentication token was provided', (done) => {
+    chai
+      .request(app)
+      .get(`${baseUrl}`)
+      .end((err, res) => {
+        const { message, status } = res.body;
+        expect(status).to.equal('error');
+        expect(message).to.equal('Kindly login to continue');
         done();
       });
   });
