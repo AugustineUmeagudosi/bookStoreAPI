@@ -14,7 +14,7 @@ export default class OrderServices {
    * @returns { Promise<Object | Error> } A promise that resolves or rejects
    * with an Object of the order resource or a DB Error.
   */
-  static async createOrder({ paymentMethod, books: orderedBooks }, userReference) {
+  static async createOrder({ books: orderedBooks }, userReference) {
     const books = await BookServices.getBooksByArrayOfReferences(Object.keys(orderedBooks));
 
     let totalPrice = 0;
@@ -25,7 +25,7 @@ export default class OrderServices {
     });
 
     const order = await db.one(orderQueries.createOrder, [
-      Helpers.generateToken(10), userReference, totalPrice, paymentMethod
+      Helpers.generateToken(10), userReference, totalPrice,
     ]);
 
     await this.createOrderItems(books, order.reference);
