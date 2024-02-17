@@ -92,6 +92,27 @@ describe('Customer Routes', () => {
       });
   });
 
+  it('Should fail to create an order if book references are wrong', (done) => {
+    expect(process.env.AUTH_TOKEN).to.exist;
+
+    chai
+      .request(app)
+      .post(`${baseUrl}`)
+      .set('Authorization', `Bearer ${process.env.AUTH_TOKEN}`)
+      .send({
+        books: {
+          wrongReference1: 1,
+          wrongReference2: 1
+        }
+      })
+      .end((err, res) => {
+        const { message, status } = res.body;
+        expect(status).to.equal('error');
+        expect(message).to.equal('Please enter valid book references');
+        done();
+      });
+  });
+
   it('Should fail to create an order if an empty object is sent as books', (done) => {
     expect(process.env.AUTH_TOKEN).to.exist;
 
