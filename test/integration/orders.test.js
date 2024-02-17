@@ -92,6 +92,22 @@ describe('Customer Routes', () => {
       });
   });
 
+  it('Should fail to create an order if an empty object is sent as books', (done) => {
+    expect(process.env.AUTH_TOKEN).to.exist;
+
+    chai
+      .request(app)
+      .post(`${baseUrl}`)
+      .set('Authorization', `Bearer ${process.env.AUTH_TOKEN}`)
+      .send({ books: {} })
+      .end((err, res) => {
+        const { message, status } = res.body;
+        expect(status).to.equal('error');
+        expect(message).to.equal('The books field must contain at least one book entry.');
+        done();
+      });
+  });
+
   it('Should fail to create an order if a books field was not provided', (done) => {
     expect(process.env.AUTH_TOKEN).to.exist;
 
@@ -103,7 +119,7 @@ describe('Customer Routes', () => {
       .end((err, res) => {
         const { message, status } = res.body;
         expect(status).to.equal('error');
-        expect(message).to.equal('"books" is required');
+        expect(message).to.equal('The books field is required.');
         done();
       });
   });

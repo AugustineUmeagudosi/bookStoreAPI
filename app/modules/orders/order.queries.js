@@ -1,36 +1,28 @@
 export default {
   getOrders: `
   SELECT
-    orders.reference,
-    orders.user_id,
-    orders.total_amount,
-    orders.status,
-    orders.created_at,
-    orders.updated_at,
-    (
-      SELECT COUNT(*)
-      FROM order_items
-      WHERE order_items.order_id = orders.reference
-    ) AS total_items
+    reference,
+    user_id,
+    total_amount,
+    status,
+    created_at,
+    updated_at,
+    total_items
   FROM orders
-  WHERE orders.user_id = $1;
+  WHERE user_id = $1;
   `,
 
   getPaginatedOrders: `
     SELECT
-      orders.reference,
-      orders.user_id,
-      orders.total_amount,
-      orders.status,
-      orders.created_at,
-      orders.updated_at,
-      (
-        SELECT COUNT(*)
-        FROM order_items
-        WHERE order_items.order_id = orders.reference
-      ) AS total_items
+      reference,
+      user_id,
+      total_amount,
+      status,
+      created_at,
+      updated_at,
+      total_items
     FROM orders
-    WHERE orders.user_id = $3
+    WHERE user_id = $3
     OFFSET $1
     LIMIT $2;
   `,
@@ -42,9 +34,9 @@ export default {
   `,
 
   createOrder: `
-    INSERT INTO orders(reference, user_id, total_amount)
-    VALUES ($1, $2, $3)
-    RETURNING reference, user_id, total_amount, status, created_at;
+    INSERT INTO orders(reference, user_id, total_amount, total_items)
+    VALUES ($1, $2, $3, $4)
+    RETURNING reference, user_id, total_amount, status, total_items, created_at;
   `,
 
   createOrderItem: `

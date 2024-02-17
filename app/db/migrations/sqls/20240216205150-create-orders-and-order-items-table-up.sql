@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS orders (
   reference VARCHAR (10) UNIQUE NOT NULL,
   user_id VARCHAR NOT NULL REFERENCES users(reference) ON DELETE RESTRICT,
   total_amount FLOAT NOT NULL,
+  total_items INTEGER NOT NULL,
   status order_status_enum DEFAULT 'pending',
   created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
