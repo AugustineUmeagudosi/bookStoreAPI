@@ -19,6 +19,14 @@ $ cd bookStoreAPI
 ~/bookStoreAPI $ git remote add origin https://github.com/AugustineUmeagudosi/bookStoreAPI.git
 ```
 
+#### `setup`
+
+```
+create a `.env` file in the projects root directory, update the `.env` file you created with the contents in the `./.env.example` file and supply the values of the variables.
+run npm install to install all the app's dependencies
+start the app by running `npm start` command
+```
+
 #### `gulp`
 
 Install [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md#getting-started) and navigate to new project directory, then run `sudo npm install` to install Node packages.
