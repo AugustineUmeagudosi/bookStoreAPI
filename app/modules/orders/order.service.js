@@ -25,7 +25,7 @@ export default class OrderServices {
     });
 
     const order = await db.one(orderQueries.createOrder, [
-      Helpers.generateToken(10), userReference, totalPrice, Object.keys(orderedBooks).length
+      Helpers.generateToken(10), userReference, totalPrice, books.length
     ]);
 
     await this.createOrderItems(books, order.reference);
