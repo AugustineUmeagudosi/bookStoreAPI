@@ -1,7 +1,6 @@
 import db from '../../db';
 import { Helpers } from '../../utils';
 import orderQueries from './order.queries';
-import BookServices from '../books/book.service';
 
 /**
  * Contains a collection of service methods for managing order resource on the app.
@@ -14,18 +13,16 @@ export default class OrderServices {
    * @returns { Promise<Object | Error> } A promise that resolves or rejects
    * with an Object of the order resource or a DB Error.
   */
-  static async createOrder({ paymentMethod, books: orderedBooks }, userReference) {
-    const books = await BookServices.getBooksByArrayOfReferences(Object.keys(orderedBooks));
-
+  static async createOrder(payload, userReference, books) {
     let totalPrice = 0;
     books.forEach(book => {
-      totalPrice += (book.price * orderedBooks[book.reference]);
-      book.quantity = orderedBooks[book.reference];
-      book.totalAmount = book.price * orderedBooks[book.reference];
+      totalPrice += (book.price * payload.books[book.reference]);
+      book.quantity = payload.books[book.reference];
+      book.totalAmount = book.price * payload.books[book.reference];
     });
 
     const order = await db.one(orderQueries.createOrder, [
-      Helpers.generateToken(10), userReference, totalPrice, paymentMethod
+      Helpers.generateToken(10), userReference, totalPrice, books.length
     ]);
 
     await this.createOrderItems(books, order.reference);

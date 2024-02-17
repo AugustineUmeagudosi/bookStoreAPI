@@ -3,7 +3,6 @@ import Chance from 'chance';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Redis from 'ioredis';
-import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
 import db from '../db';
 
@@ -107,14 +106,16 @@ export const verifyToken = (token, returnError = false) => {
  * @memberof Helper
  * @returns {Promise} - Returns a promise array of the count and the resources
 */
-export const fetchResourceByPage = async ({
-  page = 1,
-  limit = 10,
-  getCount,
-  getResources,
-  params = [],
-  countParams = []
-}) => {
+export const fetchResourceByPage = async (payload) => {
+  const {
+    page = 1,
+    limit = 10,
+    getCount,
+    getResources,
+    params = [],
+    countParams = []
+  } = payload;
+
   const offSet = (page - 1) * +limit;
   let fetchCount;
 
@@ -137,5 +138,3 @@ export const calculatePages = (total, limit = 10) => {
   const displayPage = Math.floor(total / +limit);
   return total % +limit ? displayPage + 1 : displayPage;
 };
-
-export const generateUUID = () => uuidv4();

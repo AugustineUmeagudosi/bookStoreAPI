@@ -21,8 +21,7 @@ describe('Customer Routes', () => {
         books: {
           '7TtlpKGz22': 1,
           '2gIsC7wawX': 2
-        },
-        paymentMethod: 'cash'
+        }
       })
       .end((err, res) => {
         const { message, status } = res.body;
@@ -40,8 +39,7 @@ describe('Customer Routes', () => {
         books: {
           '7TtlpKGz22': 1,
           '2gIsC7wawX': 2
-        },
-        paymentMethod: 'cash'
+        }
       })
       .end((err, res) => {
         const { message, status } = res.body;
@@ -62,8 +60,7 @@ describe('Customer Routes', () => {
         books: {
           '7TtlpKGz22': 1,
           '2gIsC7wawX': 2
-        },
-        paymentMethod: 'cash'
+        }
       })
       .end((err, res) => {
         const { message, status, data } = res.body;
@@ -85,8 +82,7 @@ describe('Customer Routes', () => {
         books: {
           '7TtlpKGz22': 'invalid value',
           '2gIsC7wawX': 2
-        },
-        paymentMethod: 'cash'
+        }
       })
       .end((err, res) => {
         const { message, status } = res.body;
@@ -96,7 +92,7 @@ describe('Customer Routes', () => {
       });
   });
 
-  it('Should fail to create an order if a paymentMethod field was not provided', (done) => {
+  it('Should fail to create an order if book references are wrong', (done) => {
     expect(process.env.AUTH_TOKEN).to.exist;
 
     chai
@@ -105,14 +101,30 @@ describe('Customer Routes', () => {
       .set('Authorization', `Bearer ${process.env.AUTH_TOKEN}`)
       .send({
         books: {
-          '7TtlpKGz22': 1,
-          '2gIsC7wawX': 2
+          wrongReference1: 1,
+          wrongReference2: 1
         }
       })
       .end((err, res) => {
         const { message, status } = res.body;
         expect(status).to.equal('error');
-        expect(message).to.equal('payment method is a required field');
+        expect(message).to.equal('Please enter valid book references');
+        done();
+      });
+  });
+
+  it('Should fail to create an order if an empty object is sent as books', (done) => {
+    expect(process.env.AUTH_TOKEN).to.exist;
+
+    chai
+      .request(app)
+      .post(`${baseUrl}`)
+      .set('Authorization', `Bearer ${process.env.AUTH_TOKEN}`)
+      .send({ books: {} })
+      .end((err, res) => {
+        const { message, status } = res.body;
+        expect(status).to.equal('error');
+        expect(message).to.equal('The books field must contain at least one book entry.');
         done();
       });
   });
@@ -124,13 +136,11 @@ describe('Customer Routes', () => {
       .request(app)
       .post(`${baseUrl}`)
       .set('Authorization', `Bearer ${process.env.AUTH_TOKEN}`)
-      .send({
-        paymentMethod: 'cash'
-      })
+      .send({})
       .end((err, res) => {
         const { message, status } = res.body;
         expect(status).to.equal('error');
-        expect(message).to.equal('"books" is required');
+        expect(message).to.equal('The books field is required.');
         done();
       });
   });
