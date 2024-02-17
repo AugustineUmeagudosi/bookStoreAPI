@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import { Response, Helpers, Constants } from '../../utils';
+import { Response, Helpers } from '../../utils';
 import UserServices from './user.service';
 
 /**
@@ -55,9 +54,9 @@ class UserController {
       role: user.role,
     });
 
-    const data = _.pick(user, Constants.userDetails);
-    data.auth_token = sessionToken;
-    return Response.info(res, 'Login successful!', 200, data);
+    user.auth_token = sessionToken;
+    delete user.password;
+    return Response.info(res, 'Login successful!', 200, user);
   }
 }
 
