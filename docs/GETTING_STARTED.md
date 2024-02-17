@@ -21,11 +21,16 @@ $ cd bookStoreAPI
 
 #### `setup`
 
-```
-create a `.env` file in the projects root directory, update the `.env` file you created with the contents in the `./.env.example` file and supply the values of the variables.
-run npm install to install all the app's dependencies
-start the app by running `npm start` command
-```
+Follow these steps to setup and start the app
+
+1. create a `.env` file in the projects root directory
+2. update the `.env` file you created with the contents in the `./.env.example` file and supply the values of the variables.
+3. run `npm install` to install all the app's dependencies
+4. start the app by running `npm start` command this will start the app on port 3000.
+5. confirm that the app is running by making a GET request to `localhost:3000/api/v1/health-check/ping`
+6. the API documentation can be found at https://documenter.getpostman.com/view/27254452/2sA2r7zP33
+7. NB: the value of the `baseUrl` variable is `localhost:3000/api/v1`
+
 
 #### `gulp`
 
